@@ -3,7 +3,7 @@
 ## Prerequiste
 
 1. test projects in .NET 6
-2. [JunitXml.TestLogger](https://www.nuget.org/packages/JunitXml.TestLogger) in your test projects (for test reports)
+2. [JunitXml.TestLogger](https://www.nuget.org/packages/JunitXml.TestLogger) in your test projects for test reports
 3. A GitLab Runner
 4. `.gitlab-ci.yml` for GitLab Runner
 
@@ -43,7 +43,12 @@ include:
   - local: .gitlab/test.yml
 ```
 
-In test.yml, we go to different...
+In test.yml, we have two [jobs](https://docs.gitlab.com/ee/ci/jobs/) (terminology in GitLab), one is for unit test and the other one is for integration test.
+Now, let us talk about the unit test job first.
+In this job, we will go to differeint directories which includes `.Tests` in the end of directory name.
+Then, executing test by `dotnet test` command.
+Significantly, we have some special arguments in command, such as --test-adapter-path and --logger, and those arguments are for test reports....
+
 <!-- TODO: -->
 
 ```yml
@@ -85,15 +90,9 @@ integration_test:
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: medusa
   image: mcr.microsoft.com/dotnet/sdk:6.0 
-  tags:
-    - docker
-    - linux
   before_script: 
     - export TEST_HOME=$(pwd)
-    - tmp=$(mktemp)
-    - cat "${TEST_HOME}/pipeline/NineYi.Portal.Shell/env/nineyi.portal.shell.integration.test.gitlab.env" > "$tmp" && mv "$tmp" "${TEST_HOME}/pipeline/NineYi.Portal.Shell/env/nineyi.portal.shell.integration.test.env"
   script:
-    - dotnet restore --configfile "${TEST_HOME}/src/nuget.config"
     - cd ${TEST_HOME}/test
     - |
       for foldername in *.IntegrationTest; do
