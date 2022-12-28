@@ -6,6 +6,10 @@ In this article, you can learn how to
 2. Include integration tests and external dependencies used in your integration test projects, such as PostgreSQL, in your GitLab CI pipeline.
 3. Preview your test reports on GitLab.
 
+## Demo
+
+[tests in CI demo project](https://gitlab.com/my-group1177/tests-in-ci-demo)
+
 ## Prerequiste
 
 1. test projects in .NET 6
