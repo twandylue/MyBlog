@@ -109,9 +109,9 @@ integration_test:
       - name: postgres:11
   variables:
     Host: postgres
-    POSTGRES_DB: portal_shell
+    POSTGRES_DB: sample_v1
     POSTGRES_USER: postgres
-    POSTGRES_PASSWORD: medusa
+    POSTGRES_PASSWORD: guest
   image: mcr.microsoft.com/dotnet/sdk:6.0 
   before_script: 
     - export TEST_HOME=$(pwd)
