@@ -8,7 +8,7 @@ In this article, you can learn how to
 
 ## Demo
 
-[tests in CI demo project](https://gitlab.com/my-group1177/tests-in-ci-demo)
+[Tests in CI demo project in GitLab](https://gitlab.com/my-group1177/tests-in-ci-demo)
 
 ## Prerequiste
 
@@ -25,7 +25,7 @@ Integrating tests, including unit tests and integration tests, in your CI pipeli
 
 Let me give you some examples first, and I will explain the details later.
 
-In the directory, `NineYi.Portal.API.Tests` is a unit test project and `NineYi.Portal.Shell.IntegrationTest` is a integration test project.
+In the directory, `Sample.Tests` is a unit test project and `Sample.Infrastructure.IntegrationTests` is a integration test project.
 
 ```plain
 $tree -a
@@ -34,12 +34,12 @@ $tree -a
 │   └───test.yml
 ├──.gitlab-ci.yml
 └──test
-   ├───NineYi.Portal.API.Tests
-   │   ├───NineYi.Portal.API.Tests.csproj
-   │   └───snip...
-   └───NineYi.Portal.Shell.IntegrationTest
-       ├───NineYi.Portal.Shell.IntegrationTest.csproj
-       └───snip...
+   ├───Sample.Tests
+   │   ├───Sample.Tests.csproj
+   │   └───(...)
+   └───Sample.Infrastructure.IntegrationTests
+       ├───Sample.Infrastructure.IntegrationTests.csproj
+       └───(...)
 ```
 
 In .gitlab-ci.yml
@@ -47,6 +47,7 @@ In .gitlab-ci.yml
 ```yaml
 stages:
   - unit-test
+  - integration-test
 
 include:
   # run unit/integration test
@@ -73,16 +74,18 @@ Second, let us talk about the details of job `integration_test` blocks by blocks
 ```yml
 unit_test:
   stage: unit-test
+  tags:
+    - docker
   image: mcr.microsoft.com/dotnet/sdk:6.0 
   before_script: 
     - export TEST_HOME=$(pwd)
   script:
     - cd ${TEST_HOME}/test
     - |
-      for foldername in *.Tests; do
-          [ -e "${foldername}" ] || continue
-          cd ./${foldername}
-          dotnet test --test-adapter-path:. --logger:'"junit;LogFilePath=..\artifacts\'${foldername}'-unit-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"'
+      for folderName in *.Tests; do
+          [ -e "${folderName}" ] || continue
+          cd ./${folderName}
+          dotnet test --test-adapter-path:. --logger:'"junit;LogFilePath=..\artifacts\'${folderName}'-unit-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"'
           cd ../
       done
   artifacts:
@@ -100,8 +103,10 @@ unit_test:
 
 integration_test:
   stage: integration-test
+  tags:
+    - docker
   services:
-      - name: postgres:11.12
+      - name: postgres:11
   variables:
     Host: postgres
     POSTGRES_DB: portal_shell
@@ -113,10 +118,10 @@ integration_test:
   script:
     - cd ${TEST_HOME}/test
     - |
-      for foldername in *.IntegrationTest; do
-          [ -e "${foldername}" ] || continue
-          cd ./${foldername}
-          dotnet test --test-adapter-path:. --logger:'"junit;LogFilePath=..\artifacts\'${foldername}'-integration-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"'
+      for folderName in *.IntegrationTests; do
+          [ -e "${folderName}" ] || continue
+          cd ./${folderName}
+          dotnet test --test-adapter-path:. --logger:'"junit;LogFilePath=..\artifacts\'${folderName}'-integration-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"'
           cd ../
       done
   artifacts:
