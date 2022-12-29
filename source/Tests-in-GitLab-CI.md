@@ -173,5 +173,5 @@ Still under contruction...
 
 - [Test reports in .NET in GitLab](https://docs.gitlab.com/ee/ci/testing/unit_test_report_examples.html#net)
 - [Services in GitLab](https://docs.gitlab.com/ee/ci/services/)
-- [Using PostgreSQL](https://docs.gitlab.com/ee/ci/services/postgres.html)
+- [Using PostgreSQL in GitLab runner](https://docs.gitlab.com/ee/ci/services/postgres.html)
 - [Tests in CI pipeline demo project](https://gitlab.com/my-group1177/tests-in-ci-demo)
