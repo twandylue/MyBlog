@@ -151,7 +151,7 @@ integration_test:
 
 ### Preview your test reports on GitLab
 
-overview
+Overview
 
 ![image](images/test_reports.PNG)
 
