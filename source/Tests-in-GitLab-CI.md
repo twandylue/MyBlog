@@ -42,7 +42,7 @@ $tree -a
        └───(...)
 ```
 
-In .gitlab-ci.yml
+In `.gitlab-ci.yml`
 
 ```yaml
 stages:
@@ -71,6 +71,8 @@ Second, let us talk about the details of job `integration_test` blocks by blocks
 - script: We will go to different directories which include `.IntegrationTest` at the end of the directory name. Then, execute each test project through the `dotnet test` command. Significantly, we have some special arguments in command, such as `--test-adapter-path` and `--logger`, and those arguments are for [test reports in .NET](https://docs.gitlab.com/ee/ci/testing/unit_test_report_examples.html#net).
 - (**Notice**) before_script: Because services in GitLab runner have different host name, for example, PostgreSQL service host name in GitLab runner is `postgres`, but in local might be `localhost`, we have to overwrite the config file used in test projects. For here, `secrets.json` is the config file for running tests locally, and `secrets.gitlab.IntegrationTests.json` is the config file for running tests in GitLab. Please see [my demo project](https://gitlab.com/my-group1177/tests-in-ci-demo) for more details.
 - variables: You can set up your own environment variables for GitLab runner, but here, we only set up [necessary environment variables](https://docs.gitlab.com/ee/ci/services/postgres.html) for PostgreSQL.
+
+In `test.yml`
 
 ```yml
 unit_test:
@@ -149,7 +151,17 @@ integration_test:
 
 ### Preview your test reports on GitLab
 
+overview
+
 ![image](images/test_reports.PNG)
+
+Unit tests reports
+
+![image](images/test_reports-2.PNG)
+
+Integration tests reports
+
+![image](images/test_reports-3.PNG)
 
 ## Conclusion
 
@@ -162,3 +174,4 @@ Still under contruction...
 - [Test reports in .NET in GitLab](https://docs.gitlab.com/ee/ci/testing/unit_test_report_examples.html#net)
 - [Services in GitLab](https://docs.gitlab.com/ee/ci/services/)
 - [Using PostgreSQL](https://docs.gitlab.com/ee/ci/services/postgres.html)
+- [Tests in CI pipeline demo project](https://gitlab.com/my-group1177/tests-in-ci-demo)
