@@ -67,6 +67,7 @@ First, let us talk about the details of job `unit_test` blocks by blocks.
 Second, let us talk about the details of job `integration_test` blocks by blocks.
 
 - stage: stage name(here is `integration-test`)
+- before_script: TODO:
 - script: We will go to different directories which include `.IntegrationTest` at the end of the directory name. Then, execute each test project through the `dotnet test` command. Significantly, we have some special arguments in command, such as `--test-adapter-path` and `--logger`, and those arguments are for [test reports in .NET](https://docs.gitlab.com/ee/ci/testing/unit_test_report_examples.html#net).
 - services: Because we rely on PostgreSQL in our integration test project, we have to set up an extra container for PostgreSQL. Here, we can prepare for PostgreSQL easily by using a feature provided by GitLab called [services](https://docs.gitlab.com/ee/ci/services). In services, we can set up different external dependencies, such as Redis, MySQL and PostgreSQL, by specifying the image name. We only use PostgreSQL here.
 - variables: You can set up your own environment variables for GitLab runner, but here, we only set up [necessary environment variables](https://docs.gitlab.com/ee/ci/services/postgres.html) for PostgreSQL.
@@ -113,8 +114,10 @@ integration_test:
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: guest
   image: mcr.microsoft.com/dotnet/sdk:6.0 
-  before_script: 
+  before_script:
     - export TEST_HOME=$(pwd)
+    - tmp=$(mktemp)
+    - cat "${TEST_HOME}/env/secrets.gitlab.IntegrationTests.json" > "$tmp" && mv "$tmp" "${TEST_HOME}/env/secrets.json"
   script:
     - cd ${TEST_HOME}/test
     - |
