@@ -33,6 +33,9 @@ $tree -a
 ├──.gitlab
 │   └───test.yml
 ├──.gitlab-ci.yml
+├──env
+│  ├───secrets.json
+│  └───secrets.gitlab.IntegrationTests.json
 └──test
    ├───Sample.Tests
    │   ├───Sample.Tests.csproj
